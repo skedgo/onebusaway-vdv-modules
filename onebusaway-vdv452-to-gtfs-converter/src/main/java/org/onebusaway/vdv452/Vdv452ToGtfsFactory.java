@@ -114,7 +114,15 @@ public class Vdv452ToGtfsFactory {
     // Right now, I'm not actually clear on how a Line is linked to a
     // TransportCompany. So for now, if there is more than one, we bail.
     Collection<TransportCompany> companies = _in.getAllTransportCompanies();
-    if (companies.size() != 1) {
+
+    if (companies.isEmpty()) {
+      Agency dummy = new Agency();
+      dummy.setId(Integer.toString(1));
+      dummy.setLang("de");
+      return dummy;
+    }
+
+    if (companies.size() > 1) {
       throw new IllegalStateException(
           "If you are reading this, it means you have a VDV 452 feed without "
               + "exactly one entry in ZUL_VERKEHRSBETRIEB.x10.  I haven't yet "

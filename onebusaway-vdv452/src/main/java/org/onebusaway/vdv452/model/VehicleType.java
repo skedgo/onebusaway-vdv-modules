@@ -19,7 +19,7 @@ import org.onebusaway.csv_entities.schema.annotations.CsvField;
 import org.onebusaway.csv_entities.schema.annotations.CsvFields;
 import org.onebusaway.vdv452.serialization.VersionedIdFieldMappingFactory;
 
-@CsvFields(filename = "MENGE_FZG_TYP.x10")
+@CsvFields(filename = "MENGE_FZG_TYP.x10", required = false)
 public class VehicleType extends IdentityBean<VersionedId> {
 
   private static final long serialVersionUID = 1L;

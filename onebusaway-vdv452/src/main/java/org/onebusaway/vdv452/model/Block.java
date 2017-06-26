@@ -19,7 +19,7 @@ import org.onebusaway.csv_entities.schema.annotations.CsvField;
 import org.onebusaway.csv_entities.schema.annotations.CsvFields;
 import org.onebusaway.vdv452.serialization.EntityFieldMappingFactory;
 
-@CsvFields(filename = "REC_UMLAUF.x10")
+@CsvFields(filename = "REC_UMLAUF.x10", required = false)
 public class Block {
 
   @CsvField(name = "ANF_ORT", mapping = EntityFieldMappingFactory.class)

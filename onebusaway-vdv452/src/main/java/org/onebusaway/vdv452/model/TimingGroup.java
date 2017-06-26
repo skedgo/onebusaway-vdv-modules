@@ -27,7 +27,7 @@ public class TimingGroup extends IdentityBean<VersionedId> {
   @CsvField(name = "FGR_NR", mapping = VersionedIdFieldMappingFactory.class)
   private VersionedId id;
 
-  @CsvField(name = "FGR_TEXT")
+  @CsvField(name = "FGR_TEXT", optional = true)
   private String desc;
 
   @Override
