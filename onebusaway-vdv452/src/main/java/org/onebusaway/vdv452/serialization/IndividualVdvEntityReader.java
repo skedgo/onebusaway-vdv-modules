@@ -22,10 +22,10 @@ import org.onebusaway.csv_entities.EntityHandler;
 import org.onebusaway.csv_entities.IndividualCsvEntityReader;
 import org.onebusaway.csv_entities.schema.EntitySchema;
 
-public class IndividaulVdvEntityReader extends IndividualCsvEntityReader {
+public class IndividualVdvEntityReader extends IndividualCsvEntityReader {
 
-  public IndividaulVdvEntityReader(CsvEntityContext context, EntitySchema schema,
-      EntityHandler handler) {
+  public IndividualVdvEntityReader(CsvEntityContext context, EntitySchema schema,
+                                   EntityHandler handler) {
     super(context, schema, handler);
   }
 

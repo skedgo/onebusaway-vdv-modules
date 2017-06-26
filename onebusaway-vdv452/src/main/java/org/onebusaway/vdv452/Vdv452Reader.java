@@ -43,7 +43,7 @@ import org.onebusaway.vdv452.model.TransportCompany;
 import org.onebusaway.vdv452.model.TravelTime;
 import org.onebusaway.vdv452.model.VehicleType;
 import org.onebusaway.vdv452.model.WaitTime;
-import org.onebusaway.vdv452.serialization.IndividaulVdvEntityReader;
+import org.onebusaway.vdv452.serialization.IndividualVdvEntityReader;
 import org.onebusaway.vdv452.serialization.VdvTokenizerStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -117,7 +117,7 @@ public class Vdv452Reader extends CsvEntityReader {
   @Override
   protected IndividualCsvEntityReader createIndividualCsvEntityReader(
       CsvEntityContext context, EntitySchema schema, EntityHandler handler) {
-    return new IndividaulVdvEntityReader(context, schema, handler);
+    return new IndividualVdvEntityReader(context, schema, handler);
   }
 
   private class EntityHandlerImpl implements EntityHandler {
