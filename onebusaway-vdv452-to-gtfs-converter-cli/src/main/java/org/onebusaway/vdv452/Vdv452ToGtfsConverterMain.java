@@ -19,21 +19,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.TimeZone;
 
-import org.apache.commons.cli.AlreadySelectedException;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.MissingArgumentException;
-import org.apache.commons.cli.MissingOptionException;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-import org.apache.commons.cli.PosixParser;
-import org.apache.commons.cli.UnrecognizedOptionException;
+import org.apache.commons.cli.*;
 
 public class Vdv452ToGtfsConverterMain {
   
   private static final String ARG_TIME_ZONE = "timeZone";
+  private static final String ARG_ROUTE_TYPE = "routeType";
 
-  private static CommandLineParser _parser = new PosixParser();
+  private static CommandLineParser _parser = new BasicParser();
 
   private Options _options = new Options();
 
@@ -50,7 +43,7 @@ public class Vdv452ToGtfsConverterMain {
 
     try {
       buildOptions();
-      CommandLine cli = _parser.parse(_options, args, true);
+      CommandLine cli = _parser.parse(_options, args);
       runApplication(cli);
       System.exit(0);
     } catch (MissingOptionException ex) {
@@ -76,11 +69,12 @@ public class Vdv452ToGtfsConverterMain {
 
   private void buildOptions() {
     _options.addOption(ARG_TIME_ZONE, true, ARG_TIME_ZONE);
+    _options.addOption(ARG_ROUTE_TYPE, true, ARG_ROUTE_TYPE);
   }
 
   private void runApplication(CommandLine cli) throws IOException {
     String[] args = cli.getArgs();
-    if (args.length != 2) {
+    if (args.length < 2) {
       printHelp();
       System.exit(-1);
     }
@@ -91,6 +85,9 @@ public class Vdv452ToGtfsConverterMain {
     
     if (cli.hasOption(ARG_TIME_ZONE)) {
       converter.setTimeZone(TimeZone.getTimeZone(cli.getOptionValue(ARG_TIME_ZONE)));
+    }
+    if (cli.hasOption(ARG_ROUTE_TYPE)) {
+      converter.setRouteType(Integer.parseInt(cli.getOptionValue(ARG_ROUTE_TYPE)));
     }
     converter.run();
   }

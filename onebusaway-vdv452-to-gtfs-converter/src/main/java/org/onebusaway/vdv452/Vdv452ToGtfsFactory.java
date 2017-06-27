@@ -48,6 +48,8 @@ public class Vdv452ToGtfsFactory {
 
   private final TimeZone _tz;
 
+  private final int _routeType;
+
   /**
    * The set of service ids for calendar entries that have already been
    * processed.
@@ -55,10 +57,11 @@ public class Vdv452ToGtfsFactory {
   private final Set<AgencyAndId> processedCalendars = new HashSet<AgencyAndId>();
 
   public Vdv452ToGtfsFactory(Vdv452Dao in, GtfsMutableRelationalDao out,
-      TimeZone tz) {
+      TimeZone tz, int routeType) {
     _in = in;
     _out = out;
     _tz = tz;
+    _routeType = routeType;
   }
 
   public Trip getTripForJourney(Journey journey) {
@@ -93,7 +96,7 @@ public class Vdv452ToGtfsFactory {
       if (line.getLongName() != null && !line.getLongName().isEmpty()) {
         route.setLongName(line.getLongName());
       }
-      route.setType(3);
+      route.setType(_routeType);
       _out.saveEntity(route);
     }
     return route;

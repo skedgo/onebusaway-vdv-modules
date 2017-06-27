@@ -36,6 +36,8 @@ public class Vdv452ToGtfsConverter {
 
   private TimeZone _tz = TimeZone.getTimeZone("Europe/Berlin");
 
+  private int _routeType = 3; // bus
+
   public void setInputPath(File inputPath) {
     _inputPath = inputPath;
   }
@@ -46,6 +48,10 @@ public class Vdv452ToGtfsConverter {
 
   public void setTimeZone(TimeZone tz) {
     _tz = tz;
+  }
+
+  public void setRouteType(int routeType) {
+    _routeType = routeType;
   }
   
   public void run() throws IOException {
@@ -63,7 +69,7 @@ public class Vdv452ToGtfsConverter {
   }
 
   private void convert(Vdv452Dao in, GtfsMutableRelationalDao out) {
-    Vdv452ToGtfsFactory factory = new Vdv452ToGtfsFactory(in, out, _tz);
+    Vdv452ToGtfsFactory factory = new Vdv452ToGtfsFactory(in, out, _tz, _routeType);
     for (TransportCompany company : in.getAllTransportCompanies()) {
       factory.getAgencyForTransportCompany(company);
     }
