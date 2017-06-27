@@ -25,6 +25,8 @@ public class Vdv452ToGtfsConverterMain {
   
   private static final String ARG_TIME_ZONE = "timeZone";
   private static final String ARG_ROUTE_TYPE = "routeType";
+  private static final String ARG_AGENCY_NAME = "agencyName";
+  private static final String ARG_AGENCY_URL = "agencyUrl";
 
   private static CommandLineParser _parser = new BasicParser();
 
@@ -70,6 +72,8 @@ public class Vdv452ToGtfsConverterMain {
   private void buildOptions() {
     _options.addOption(ARG_TIME_ZONE, true, ARG_TIME_ZONE);
     _options.addOption(ARG_ROUTE_TYPE, true, ARG_ROUTE_TYPE);
+    _options.addOption(ARG_AGENCY_NAME, true, ARG_AGENCY_NAME);
+    _options.addOption(ARG_AGENCY_URL, true, ARG_AGENCY_URL);
   }
 
   private void runApplication(CommandLine cli) throws IOException {
@@ -88,6 +92,12 @@ public class Vdv452ToGtfsConverterMain {
     }
     if (cli.hasOption(ARG_ROUTE_TYPE)) {
       converter.setRouteType(Integer.parseInt(cli.getOptionValue(ARG_ROUTE_TYPE)));
+    }
+    if (cli.hasOption(ARG_AGENCY_NAME)) {
+      converter.setAgencyName(cli.getOptionValue(ARG_AGENCY_NAME));
+    }
+    if (cli.hasOption(ARG_AGENCY_URL)) {
+      converter.setAgencyUrl(cli.getOptionValue(ARG_AGENCY_URL));
     }
     converter.run();
   }

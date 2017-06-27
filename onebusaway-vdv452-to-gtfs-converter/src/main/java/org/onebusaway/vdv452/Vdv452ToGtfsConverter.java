@@ -17,6 +17,7 @@ package org.onebusaway.vdv452;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.TimeZone;
 
 import org.onebusaway.gtfs.impl.GtfsRelationalDaoImpl;
@@ -38,6 +39,10 @@ public class Vdv452ToGtfsConverter {
 
   private int _routeType = 3; // bus
 
+  private String _agencyName = "";
+
+  private String _agencyUrl = "https://github.com/OneBusAway/onebusaway-vdv-modules";
+
   public void setInputPath(File inputPath) {
     _inputPath = inputPath;
   }
@@ -53,7 +58,17 @@ public class Vdv452ToGtfsConverter {
   public void setRouteType(int routeType) {
     _routeType = routeType;
   }
-  
+
+  public void setAgencyName(String agencyName)
+  {
+    _agencyName = agencyName;
+  }
+
+  public void setAgencyUrl(String agencyUrl)
+  {
+    _agencyUrl = agencyUrl;
+  }
+
   public void run() throws IOException {
     Vdv452Reader reader = new Vdv452Reader();
     reader.setInputLocation(_inputPath);
@@ -69,10 +84,16 @@ public class Vdv452ToGtfsConverter {
   }
 
   private void convert(Vdv452Dao in, GtfsMutableRelationalDao out) {
-    Vdv452ToGtfsFactory factory = new Vdv452ToGtfsFactory(in, out, _tz, _routeType);
-    for (TransportCompany company : in.getAllTransportCompanies()) {
-      factory.getAgencyForTransportCompany(company);
+    Vdv452ToGtfsFactory factory = new Vdv452ToGtfsFactory(in, out, _tz, _routeType, _agencyName, _agencyUrl);
+    Collection<TransportCompany> companies = in.getAllTransportCompanies();
+    if (companies.isEmpty()) {
+      factory.getDummyAgency();
+    } else {
+      for (TransportCompany company : companies) {
+        factory.getAgencyForTransportCompany(company);
+      }
     }
+
     for (StopPoint stop : in.getAllStopPoints()) {
       factory.getStopForStopPoint(stop);
     }

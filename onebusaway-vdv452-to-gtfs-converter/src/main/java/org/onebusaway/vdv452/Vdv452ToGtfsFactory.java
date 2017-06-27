@@ -50,6 +50,11 @@ public class Vdv452ToGtfsFactory {
 
   private final int _routeType;
 
+  private final String _agencyName;
+
+  private final String _agencyUrl;
+
+
   /**
    * The set of service ids for calendar entries that have already been
    * processed.
@@ -57,11 +62,13 @@ public class Vdv452ToGtfsFactory {
   private final Set<AgencyAndId> processedCalendars = new HashSet<AgencyAndId>();
 
   public Vdv452ToGtfsFactory(Vdv452Dao in, GtfsMutableRelationalDao out,
-      TimeZone tz, int routeType) {
+                             TimeZone tz, int routeType, String agencyName, String agencyUrl) {
     _in = in;
     _out = out;
     _tz = tz;
     _routeType = routeType;
+    _agencyName = agencyName;
+    _agencyUrl = agencyUrl;
   }
 
   public Trip getTripForJourney(Journey journey) {
@@ -108,10 +115,7 @@ public class Vdv452ToGtfsFactory {
     Collection<TransportCompany> companies = _in.getAllTransportCompanies();
 
     if (companies.isEmpty()) {
-      Agency dummy = new Agency();
-      dummy.setId(Integer.toString(1));
-      dummy.setLang("de");
-      return dummy;
+      return getDummyAgency();
     }
 
     if (companies.size() > 1) {
@@ -133,7 +137,23 @@ public class Vdv452ToGtfsFactory {
       agency.setId(agencyId);
       agency.setName(company.getName());
       agency.setTimezone(_tz.getID());
-      agency.setUrl("https://github.com/OneBusAway/onebusaway-vdv-modules");
+      agency.setUrl(_agencyUrl);
+      agency.setLang("de");
+      _out.saveEntity(agency);
+    }
+    return agency;
+  }
+
+  public Agency getDummyAgency()
+  {
+    String id = Integer.toString(1);
+    Agency agency = _out.getAgencyForId(id);
+    if (agency == null) {
+      agency = new Agency();
+      agency.setId(id);
+      agency.setName(_agencyName);
+      agency.setTimezone(_tz.getID());
+      agency.setUrl(_agencyUrl);
       agency.setLang("de");
       _out.saveEntity(agency);
     }
@@ -244,4 +264,5 @@ public class Vdv452ToGtfsFactory {
     }
     return ordered;
   }
+
 }
