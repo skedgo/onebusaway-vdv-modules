@@ -40,6 +40,9 @@ public class Stop extends IdentityBean<StopId> {
   @CsvField(name = "BETRIEBLICHER_HALT", optional = true)
   private boolean operationalStop = false;
 
+  @CsvField(name = "HST_NR_INTERNATIONAL", optional = true)
+  private String internationalCode;
+
   @Override
   public StopId getId() {
     return id;
@@ -82,6 +85,16 @@ public class Stop extends IdentityBean<StopId> {
   public void setOperationalStop(boolean operationalStop)
   {
     this.operationalStop = operationalStop;
+  }
+
+  public String getInternationalCode()
+  {
+    return internationalCode;
+  }
+
+  public void setInternationalCode(String internationalCode)
+  {
+    this.internationalCode = internationalCode;
   }
 
 }

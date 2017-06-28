@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.onebusaway.collections.MappingLibrary;
 import org.onebusaway.collections.tuple.Pair;
@@ -200,6 +202,27 @@ public class Vdv452ToGtfsFactory {
       gtfsStop.setName(vdvStop.getName());
       gtfsStop.setLat(vdvStop.getLat());
       gtfsStop.setLon(vdvStop.getLng());
+      gtfsStop.setCode(vdvStop.getInternationalCode());
+      gtfsStop.setPlatformCode(getPlatformForStop(vdvStop));
+
+      String parentCode = getParentCodeForStop(vdvStop);
+      if (parentCode != null) {
+        AgencyAndId parentId = new AgencyAndId("1", parentCode);
+        Stop parentStop = _out.getStopForId(parentId);
+        if (parentStop == null) {
+          parentStop = new Stop();
+          parentStop.setLocationType(1);
+          parentStop.setId(parentId);
+          // TODO: would be better to set the lat/lon according to all stations, rather than just the first
+          parentStop.setName(vdvStop.getName());
+          parentStop.setLat(vdvStop.getLat());
+          parentStop.setLon(vdvStop.getLng());
+          parentStop.setCode(parentCode);
+          _out.saveEntity(parentStop);
+        }
+        gtfsStop.setParentStation(parentCode);
+      }
+
       _out.saveEntity(gtfsStop);
     }
     return gtfsStop;
@@ -263,6 +286,34 @@ public class Vdv452ToGtfsFactory {
       ordered.add(waitTime);
     }
     return ordered;
+  }
+
+  // Pattern is: "$countryCode:$regionCode:$stopCode:$modeCode:$platform"
+  private static final Pattern internationalCodePattern = Pattern.compile("^([^:])+:([^:]+):([^:]+):([^:]+):([^:]+)$");
+
+  private static String getPlatformForStop(org.onebusaway.vdv452.model.Stop vdvStop) {
+    String internationalCode = vdvStop.getInternationalCode();
+    if (internationalCode == null) {
+      return null;
+    }
+    Matcher matcher = internationalCodePattern.matcher(internationalCode);
+    if (!matcher.matches()) {
+      return null;
+    }
+    return matcher.group(5);
+  }
+
+  private static String getParentCodeForStop(org.onebusaway.vdv452.model.Stop vdvStop)
+  {
+    String internationalCode = vdvStop.getInternationalCode();
+    if (internationalCode == null) {
+      return null;
+    }
+    Matcher matcher = internationalCodePattern.matcher(internationalCode);
+    if (!matcher.matches()) {
+      return null;
+    }
+    return matcher.group(3);
   }
 
 }
