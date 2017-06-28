@@ -194,7 +194,7 @@ public class Vdv452ToGtfsFactory {
       if (vdvStop == null) {
         throw new IllegalStateException("unknown stop: " + stopId);
       }
-      if (vdvStop.getId().getType() == EStopType.SKIP) {
+      if (vdvStop.isOperationalStop() || vdvStop.getId().getType() == EStopType.SKIP) {
         return null;
       }
       gtfsStop.setName(vdvStop.getName());

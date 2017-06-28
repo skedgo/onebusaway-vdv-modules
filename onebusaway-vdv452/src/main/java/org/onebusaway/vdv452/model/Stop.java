@@ -37,6 +37,9 @@ public class Stop extends IdentityBean<StopId> {
   @CsvField(name = "ORT_POS_LAENGE", mapping=DegressMinutesSecondsFieldMappingFactory.class)
   private double lng;
 
+  @CsvField(name = "BETRIEBLICHER_HALT", optional = true)
+  private boolean operationalStop = false;
+
   @Override
   public StopId getId() {
     return id;
@@ -70,4 +73,15 @@ public class Stop extends IdentityBean<StopId> {
   public void setLng(double lng) {
     this.lng = lng;
   }
+
+  public boolean isOperationalStop()
+  {
+    return operationalStop;
+  }
+
+  public void setOperationalStop(boolean operationalStop)
+  {
+    this.operationalStop = operationalStop;
+  }
+
 }
